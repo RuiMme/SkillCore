@@ -32,7 +32,7 @@ public class SkillScreen extends Screen {
     private AbstractSkillScreen activeTab;
 
     // --- 翻页核心常量与变量 ---
-    private static final int TABS_PER_ROW = 8; // 每行最多放 8 个
+    private static final int TABS_PER_ROW = 11; // 每行最多放 8 个
     private static final int TABS_PER_PAGE = TABS_PER_ROW * 2; // 上下两行，每页最多 16 个
     private int currentPage = 0; // 当前页码（从 0 开始）
 
@@ -53,10 +53,10 @@ public class SkillScreen extends Screen {
         super.init();
 
         // 动态计算宽高，自适应屏幕
-        this.xSize = this.width - 40;
-        this.ySize = this.height - 45;
+        this.xSize = this.width - 50;
+        this.ySize = this.height - 80;
         this.guiLeft = (this.width - this.xSize) / 2;
-        this.guiTop = (this.height - this.ySize) / 2 + 15;
+        this.guiTop = (this.height - this.ySize) / 2;
 
         tabs.clear();
         List<String> categories = new ArrayList<>(SkillManager.getCategories());
@@ -138,14 +138,9 @@ public class SkillScreen extends Screen {
             int tabX = guiLeft + col * 28;
             int tabY = isTopRow ? (guiTop - 28) : (guiTop + ySize - 4); // 顶部栏在窗口上，底部栏在窗口下
 
-            // 计算材质 UV（利用原版材质：顶部没选中0/0，选中0/32；底部没选中0/64，选中0/96）
-            int u = 0;
-            int v;
-            if (isTopRow) {
-                v = isActive ? 32 : 0;
-            } else {
-                v = isActive ? 96 : 64;
-            }
+            // 计算材质 UV（利用原版材质：顶部没选中0/0，选中0/32；底部没选中84/0，选中84/32）
+            int u = isTopRow ? 0 : 84;
+            int v = isActive ? 32 : 0;
 
             this.minecraft.getTextureManager().bind(TABS);
             this.blit(ms, tabX, tabY, u, v, 28, 32);
