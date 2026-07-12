@@ -93,7 +93,7 @@ public class SkillNode {
                 isParentUnlocked = cap.hasSkill(parent.getCategory(), parent.getId());
                 if (!isParentUnlocked) break;
             }
-            if(isUnlocked) {
+            if(isUnlocked && isActive) {
                 RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             } else if (!isParentUnlocked) {
                 RenderSystem.color4f(0.1F, 0.1F, 0.1F, 1.0F);
@@ -142,7 +142,7 @@ public class SkillNode {
                 RenderSystem.enableDepthTest(); // 恢复深度测试
                 ms.popPose();
             } else {
-                if(isUnlocked) {
+                if(isUnlocked && isActive) {
                     RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
                 } else if (!isParentUnlocked) {
                     RenderSystem.color4f(0.1F, 0.1F, 0.1F, 1.0F);
