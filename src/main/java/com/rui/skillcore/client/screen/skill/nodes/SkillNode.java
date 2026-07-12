@@ -93,14 +93,15 @@ public class SkillNode {
                 isParentUnlocked = cap.hasSkill(parent.getCategory(), parent.getId());
                 if (!isParentUnlocked) break;
             }
-            if (!isParentUnlocked) {
+            if(isUnlocked) {
+                RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            } else if (!isParentUnlocked) {
                 RenderSystem.color4f(0.1F, 0.1F, 0.1F, 1.0F);
-            } else if (!isUnlocked || !isActive) {
+            } else if (!isActive) {
                 RenderSystem.color4f(0.4F, 0.4F, 0.4F, 1.0F);
             } else {
                 RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             }
-
             // 渲染背景框 (使用原版进度的方形框)
             mc.getTextureManager().bind(WIDGETS);
             // 如果已解锁使用高亮框(u=0,v=26)，未解锁使用暗色框(u=0,v=0)
@@ -141,9 +142,11 @@ public class SkillNode {
                 RenderSystem.enableDepthTest(); // 恢复深度测试
                 ms.popPose();
             } else {
-                if (!isParentUnlocked) {
+                if(isUnlocked) {
+                    RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+                } else if (!isParentUnlocked) {
                     RenderSystem.color4f(0.1F, 0.1F, 0.1F, 1.0F);
-                } else if (!isUnlocked || !isActive) {
+                } else if (!isActive) {
                     RenderSystem.color4f(0.4F, 0.4F, 0.4F, 1.0F);
                 } else {
                     RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);

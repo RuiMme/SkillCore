@@ -166,7 +166,7 @@ public class DynamicSkillScreen extends AbstractSkillScreen {
                     if(!isParentUnlocked) break;
                 }
 
-                if(isParentUnlocked) {
+                if(isParentUnlocked || cap.hasSkill(hoveredNode.getCategory(), hoveredNode.getId())) {
                     tooltip.add(new StringTextComponent("§e§l" + hoveredNode.getName()));
                     String rawDescription = hoveredNode.getDescription();
 
