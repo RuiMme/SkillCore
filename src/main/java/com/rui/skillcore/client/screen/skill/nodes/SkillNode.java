@@ -30,7 +30,7 @@ public class SkillNode {
     private final int y; // 在树中的相对 Y 坐标
     private List<SkillNode> parent = new ArrayList<>();
     private final List<SkillNode> children = new ArrayList<>();
-    private static final ResourceLocation WIDGETS = new ResourceLocation(LibMisc.MOD_ID, "textures/gui/icon.png");
+    private static final ResourceLocation WIDGETS = new ResourceLocation(LibMisc.MOD_ID, "assets/skillcore/gui/icon.png");
 
     private ItemStack cachedItemIcon = ItemStack.EMPTY;
     private boolean isItem = false;

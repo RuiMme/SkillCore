@@ -25,8 +25,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SkillScreen extends Screen {
-    private static final ResourceLocation WINDOW = new ResourceLocation("minecraft", "textures/gui/advancements/window.png");
-    private static final ResourceLocation TABS = new ResourceLocation("minecraft", "textures/gui/advancements/tabs.png");
+    private static final ResourceLocation WINDOW = new ResourceLocation("minecraft", "assets/skillcore/gui/advancements/window.png");
+    private static final ResourceLocation TABS = new ResourceLocation("minecraft", "assets/skillcore/gui/advancements/tabs.png");
 
     private final List<AbstractSkillScreen> tabs = new ArrayList<>();
     private AbstractSkillScreen activeTab;
