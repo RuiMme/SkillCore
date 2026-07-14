@@ -127,6 +127,8 @@ public class SkillScreen extends Screen {
         int startIndex = currentPage * TABS_PER_PAGE;
         int endIndex = Math.min(startIndex + TABS_PER_PAGE, tabs.size());
 
+        AbstractSkillScreen hoveredTab = null;
+
         for (int i = startIndex; i < endIndex; i++) {
             AbstractSkillScreen tab = tabs.get(i);
             boolean isActive = (tab == activeTab);
@@ -159,8 +161,12 @@ public class SkillScreen extends Screen {
 
             // 悬停提示
             if (mouseX >= tabX && mouseX <= tabX + 28 && mouseY >= tabY && mouseY <= tabY + 32) {
-                this.renderTooltip(ms, tab.getTitle(), mouseX, mouseY);
+                hoveredTab = tab;
             }
+        }
+
+        if (hoveredTab != null) {
+            this.renderTooltip(ms, hoveredTab.getTitle(), mouseX, mouseY);
         }
 
         // 如果总标签超过了TABS_PER_PAGE，绘制翻页按钮

@@ -9,6 +9,7 @@ import com.rui.skillcore.libs.LibMisc;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
@@ -102,6 +103,8 @@ public class SkillNode {
             } else {
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
+
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
             // 渲染背景框 (使用原版进度的方形框)
             RenderSystem.setShaderTexture(0, WIDGETS);
             // 如果已解锁使用高亮框(u=0,v=26)，未解锁使用暗色框(u=0,v=0)
