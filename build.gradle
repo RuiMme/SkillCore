@@ -13,9 +13,12 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '2.0.3'
-group = 'com.rui.skillcore' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'skillcore'
+ext.configFile = file('build.properties')
+ext.config = parseConfig(configFile)
+def mc_version = "1.18.x"
+version = "${mc_version}-${config.build_number}"
+group = "com.rui.skillcore" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = config.mod_name
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -111,5 +114,17 @@ publishing {
         maven {
             url "file://${project.projectDir}/mcmodsrepo"
         }
+    }
+}
+
+def parseConfig(File config) {
+    if(config.exists()){
+        config.withReader {
+            def prop = new Properties()
+            prop.load(it)
+            return (new ConfigSlurper().parse(prop))
+        }
+    } else {
+        return null
     }
 }
