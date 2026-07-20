@@ -49,9 +49,3 @@ description='''
     versionRange="[1.18.1,1.19)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.skillcore]]
-    modId="skillcore"
-    mandatory=true
-    versionRange="[2,)"
-    ordering="NONE"
-    side="BOTH"
