@@ -1,4 +1,5 @@
 {
   "key.category.skillcore": "技能核心",
-  "key.skillcore.open_skill_screen": "开启/关闭技能栏"
+  "key.skillcore.open_skill_screen": "开启/关闭技能栏",
+  "key.skillcore.open_skill_config_screen": "开启/关闭技能配置窗口"
 }

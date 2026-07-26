@@ -32,5 +32,6 @@ public class Main {
 
     private void client(FMLClientSetupEvent event) {
         ClientRegistry.registerKeyBinding(KeyBindings.OPEN_SKILL_SCREEN);
+        ClientRegistry.registerKeyBinding(KeyBindings.OPEN_SKILL_CONFIG_SCREEN);
     }
 }

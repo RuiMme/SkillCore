@@ -56,14 +56,26 @@ public class C2SUnlockSkillPacket {
                 // 在服务端给玩家解锁技能
                 player.getCapability(SkillProvider.SKILL_CAP).ifPresent(data -> {
                     Map<Item, Integer> map = new HashMap<>();
-                    SkillNode targetNode = SkillManager.CATEGORIZED_NODES.get(category).get(skillId);
-                    if(targetNode != null) {
-                        // 服务端防作弊安全网: 复用相同的逻辑校验
-                        if (!targetNode.isVisible(data, SkillManager.CATEGORIZED_NODES)) {
-                            // 玩家企图非法激活一条已经被互斥封禁的整条分枝,直接无视并拦截
-                            return;
+
+                    if (nodeData.exclusives != null) {
+                        for (String exclusiveStr : nodeData.exclusives) {
+                            ResourceLocation exclusiveId = new ResourceLocation(exclusiveStr);
+                            // 如果玩家尝试解锁的技能与他已拥有的技能互斥，则直接拦截
+                            if (data.hasSkill(nodeData.category, exclusiveId)) {
+                                System.out.println("[Skill Network] 玩家尝试非法解锁被互斥封禁的技能: " + this.skillId);
+                                return;
+                            }
                         }
                     }
+
+//                    SkillNode targetNode = SkillManager.CATEGORIZED_NODES.get(category).get(skillId);
+//                    if(targetNode != null) {
+//                        // 服务端防作弊安全网: 复用相同的逻辑校验
+//                        if (!targetNode.isVisible(data, SkillManager.CATEGORIZED_NODES)) {
+//                            // 玩家企图非法激活一条已经被互斥封禁的整条分枝,直接无视并拦截
+//                            return;
+//                        }
+//                    }
                     // 这里可以加入前置条件判定、扣除经验或点数逻辑
                     if (data.hasSkill(nodeData.category, this.skillId)) return;
                     if (nodeData.parents != null) {
