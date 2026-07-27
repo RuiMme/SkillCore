@@ -12,5 +12,6 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onKeyRegister(RegisterKeyMappingsEvent event) {
         event.register(KeyBindings.OPEN_SKILL_SCREEN);
+        event.register(KeyBindings.OPEN_SKILL_CONFIG_SCREEN);
     }
 }
