@@ -1,12 +1,9 @@
 package com.rui.skillcore;
 
-import com.rui.skillcore.api.capability.skill.ISkillData;
-import com.rui.skillcore.api.capability.skill.SkillData;
 import com.rui.skillcore.api.network.PacketHandler;
 import com.rui.skillcore.client.keys.KeyBindings;
 import com.rui.skillcore.libs.LibMisc;
 import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -32,5 +29,6 @@ public class Main {
 
     private void client(FMLClientSetupEvent event) {
         ClientRegistry.registerKeyBinding(KeyBindings.OPEN_SKILL_SCREEN);
+        ClientRegistry.registerKeyBinding(KeyBindings.OPEN_SKILL_CONFIG_SCREEN);
     }
 }

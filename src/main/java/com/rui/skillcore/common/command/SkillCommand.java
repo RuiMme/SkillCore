@@ -7,6 +7,8 @@ import com.rui.skillcore.api.capability.skill.SkillProvider;
 import com.rui.skillcore.api.network.PacketHandler;
 import com.rui.skillcore.api.network.skill.stc.S2CSyncSkillsPacket;
 import com.rui.skillcore.client.screen.skill.manager.SkillManager;
+import com.rui.skillcore.data.SkillData;
+import com.rui.skillcore.data.SkillDataLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -19,25 +21,27 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SkillCommand {
-    // 获取所有分类
+    // 获取所有分类 (改为从双端通用的 CATEGORY_DATA 获取)
     private static final SuggestionProvider<CommandSourceStack> CATEGORY_SUGGESTIONS = (ctx, builder) -> {
-        return SharedSuggestionProvider.suggest(SkillManager.CATEGORIZED_NODES.keySet(), builder);
-    };
-    // 获取指定分类下的所有技能ID
-    private static final SuggestionProvider<CommandSourceStack> SKILL_ID_SUGGESTIONS = (ctx, builder) -> {
-        String category = StringArgumentType.getString(ctx, "category");
-        if (SkillManager.CATEGORIZED_NODES.containsKey(category)) {
-            // 将 ResourceLocation 转为 String 字符串供补全使用
-            return SharedSuggestionProvider.suggest(
-                    SkillManager.CATEGORIZED_NODES.get(category).keySet().stream().map(ResourceLocation::toString),
-                    builder
-            );
-        }
-        return builder.buildFuture();
+        return SharedSuggestionProvider.suggest(SkillDataLoader.CATEGORY_DATA.keySet(), builder);
     };
 
+    // 获取指定分类下的所有技能ID (改为从双端通用的 RAW_DATA 过滤)
+    private static final SuggestionProvider<CommandSourceStack> SKILL_ID_SUGGESTIONS = (ctx, builder) -> {
+        String category = StringArgumentType.getString(ctx, "category");
+
+        // 过滤出该分类下的所有技能 ID 字符串
+        List<String> skillIds = SkillDataLoader.RAW_DATA.values().stream()
+                .filter(data -> category.equals(data.category))
+                .map(data -> data.id)
+                .collect(Collectors.toList());
+
+        return SharedSuggestionProvider.suggest(skillIds, builder);
+    };
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
@@ -100,11 +104,9 @@ public class SkillCommand {
     private static int unlockAll(CommandSourceStack source, Collection<ServerPlayer> targets) {
         for (ServerPlayer target : targets) {
             target.getCapability(SkillProvider.SKILL_CAP).ifPresent(cap -> {
-                // 遍历你缓存的所有技能类别和 ID 并解锁
-                SkillManager.CATEGORIZED_NODES.forEach((category, nodeMap) -> {
-                    for (ResourceLocation skillId : nodeMap.keySet()) {
-                        cap.unlockSkill(category, skillId);
-                    }
+                // 改为遍历 RAW_DATA 来进行解锁
+                SkillDataLoader.RAW_DATA.values().forEach(data -> {
+                    cap.unlockSkill(data.category, new ResourceLocation(data.id));
                 });
 
                 // 解锁完必须向该玩家发送网络包更新 UI！
@@ -121,11 +123,15 @@ public class SkillCommand {
     private static int unlockSpecific(CommandSourceStack source, Collection<ServerPlayer> targets, String category, ResourceLocation skillId) {
         for (ServerPlayer target : targets) {
             target.getCapability(SkillProvider.SKILL_CAP).ifPresent(cap -> {
-                // 容错：检查该技能是否真的存在
-                if (!SkillManager.CATEGORIZED_NODES.containsKey(category) || !SkillManager.CATEGORIZED_NODES.get(category).containsKey(skillId)) {
+                // 改为从 RAW_DATA 获取数据进行校验
+                SkillData data = SkillDataLoader.RAW_DATA.get(skillId);
+
+                // 容错：检查该技能是否存在，并且传入的 category 是否匹配
+                if (data == null || !category.equals(data.category)) {
                     source.sendFailure(new TextComponent("未找到指定技能: " + category + " - " + skillId).withStyle(ChatFormatting.RED));
                     return; // 跳过当前玩家
                 }
+
                 cap.unlockSkill(category, skillId);
                 // 同步数据给客户端
                 PacketHandler.sendToClient(target, new S2CSyncSkillsPacket(cap.getUnlockedSkills()));
