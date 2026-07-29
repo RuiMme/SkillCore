@@ -16,6 +16,7 @@ public class KeyBindings extends KeyBinding {
 
     public static final KeyBinding OPEN_SKILL_SCREEN = new KeyBindings("open_skill_screen", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_K, "key.category.skillcore");
     public static final KeyBinding OPEN_SKILL_CONFIG_SCREEN = new KeyBindings("open_skill_config_screen", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_J, "key.category.skillcore");
+    public static final KeyBinding OPEN_KEYBIND_SCREEN = new KeyBindings("open_keybind_screen", KeyConflictContext.IN_GAME, KeyModifier.NONE, GLFW.GLFW_KEY_H, "key.category.skillcore");
 
     public KeyBindings(String description, IKeyConflictContext keyConflictContext, KeyModifier keyModifier, int keyCode, String category) {
         super(String.format("key.%s.%s", LibMisc.MOD_ID, description), keyConflictContext, keyModifier, InputMappings.Type.KEYSYM, keyCode, category);

@@ -3,6 +3,7 @@ package com.rui.skillcore.client.event;
 import com.rui.skillcore.client.keys.KeyBindings;
 import com.rui.skillcore.client.screen.skill.SkillScreen;
 import com.rui.skillcore.client.screen.skillconfig.SkillSettingsScreen;
+import com.rui.skillcore.client.screen.skillkeybind.KeybindSettingsScreen;
 import com.rui.skillcore.libs.LibMisc;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,6 +24,9 @@ public class KeyInputHandler {
             }
             if (KeyBindings.OPEN_SKILL_CONFIG_SCREEN.consumeClick()) {
                 mc.tell(() -> mc.setScreen(new SkillSettingsScreen()));
+            }
+            if (KeyBindings.OPEN_KEYBIND_SCREEN.consumeClick()) {
+                mc.tell(() -> mc.setScreen(new KeybindSettingsScreen(null)));
             }
         }
     }
