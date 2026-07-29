@@ -1,6 +1,7 @@
 package com.rui.skillcore.common.event;
 
 import com.rui.skillcore.api.capability.skill.ISkillData;
+import com.rui.skillcore.api.capability.skill.SkillData;
 import com.rui.skillcore.api.capability.skill.SkillProvider;
 import com.rui.skillcore.api.network.PacketHandler;
 import com.rui.skillcore.api.network.skill.stc.S2CSyncActiveSkillsPacket;
@@ -46,14 +47,19 @@ public class CapabilityEvent {
         Player clone = event.getEntity();
 
         if(!clone.level().isClientSide) {
+            original.reviveCaps();
             original.getCapability(SkillProvider.SKILL_CAP).ifPresent(oldData -> {
                 clone.getCapability(SkillProvider.SKILL_CAP).ifPresent(newData -> {
-                    oldData.getUnlockedSkills().forEach((key, set) -> set.forEach(resourceLocation -> newData.unlockSkill(key, resourceLocation)));
-                    oldData.getActiveSkills().forEach((key, set) -> set.forEach(resourceLocation -> newData.activeSkill(key, resourceLocation)));
-                    oldData.getSkillCooldownGameTime().forEach((key, set) -> set.forEach((key1, set1) -> newData.setSkillCooldownGameTime(key, key1, set1)));
-                    oldData.getSkillCooldown().forEach((key, set) -> set.forEach((key1, set1) -> newData.setSkillCooldown(key, key1, set1)));
+                    if (newData instanceof SkillData newSkillData && oldData instanceof SkillData oldSkillData) {
+                        newSkillData.loadNBT(oldSkillData.saveNBT());
+                    }
+//                    oldData.getUnlockedSkills().forEach((key, set) -> set.forEach(resourceLocation -> newData.unlockSkill(key, resourceLocation)));
+//                    oldData.getActiveSkills().forEach((key, set) -> set.forEach(resourceLocation -> newData.activeSkill(key, resourceLocation)));
+//                    oldData.getSkillCooldownGameTime().forEach((key, set) -> set.forEach((key1, set1) -> newData.setSkillCooldownGameTime(key, key1, set1)));
+//                    oldData.getSkillCooldown().forEach((key, set) -> set.forEach((key1, set1) -> newData.setSkillCooldown(key, key1, set1)));
                 });
             });
+            original.invalidateCaps();
         }
     }
 
