@@ -4,6 +4,7 @@ import com.rui.skillcore.api.capability.skill.ISkillData;
 import com.rui.skillcore.api.capability.skill.SkillData;
 import com.rui.skillcore.api.network.PacketHandler;
 import com.rui.skillcore.client.keys.KeyBindings;
+import com.rui.skillcore.client.keys.custom.KeybindConfigManager;
 import com.rui.skillcore.libs.LibMisc;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -18,13 +19,16 @@ public class Main {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.register(this.getClass());
         bus.addListener(this::common);
+        bus.addListener(this::client);
 
         PacketHandler.init();
     }
 
     private void common(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-//            CapabilityManager.INSTANCE.register(ISkillData.class, new SkillData.Storage(), SkillData::new);
-        });
+
+    }
+
+    private void client(FMLClientSetupEvent event) {
+        event.enqueueWork(KeybindConfigManager::load);
     }
 }
