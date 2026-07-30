@@ -13,5 +13,6 @@ public class ClientEvents {
     public static void onKeyRegister(RegisterKeyMappingsEvent event) {
         event.register(KeyBindings.OPEN_SKILL_SCREEN);
         event.register(KeyBindings.OPEN_SKILL_CONFIG_SCREEN);
+        event.register(KeyBindings.OPEN_KEYBIND_SCREEN);
     }
 }
