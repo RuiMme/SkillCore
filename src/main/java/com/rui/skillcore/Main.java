@@ -2,6 +2,7 @@ package com.rui.skillcore;
 
 import com.rui.skillcore.api.network.PacketHandler;
 import com.rui.skillcore.client.keys.KeyBindings;
+import com.rui.skillcore.client.keys.custom.KeybindConfigManager;
 import com.rui.skillcore.libs.LibMisc;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,5 +31,7 @@ public class Main {
     private void client(FMLClientSetupEvent event) {
         ClientRegistry.registerKeyBinding(KeyBindings.OPEN_SKILL_SCREEN);
         ClientRegistry.registerKeyBinding(KeyBindings.OPEN_SKILL_CONFIG_SCREEN);
+        ClientRegistry.registerKeyBinding(KeyBindings.OPEN_KEYBIND_SCREEN);
+        event.enqueueWork(KeybindConfigManager::load);
     }
 }
