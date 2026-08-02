@@ -47,7 +47,7 @@ public class KeybindSettingsScreen extends Screen {
             CustomKeybindRegistry.KeybindCategory category = CustomKeybindRegistry.CATEGORIES.get(i);
             int btnY = navStartY + (i * 25);
 
-            Button navBtn = this.addWidget(Button.builder(Component.literal(category.name), (btn) -> {
+            Button navBtn = this.addRenderableWidget(Button.builder(Component.literal(category.name), (btn) -> {
                 this.currentCategory = category;
                 this.init(this.minecraft, this.width, this.height);
             }).pos(10, btnY).size(leftPanelWidth - 20, 20).build());
@@ -60,7 +60,7 @@ public class KeybindSettingsScreen extends Screen {
         // ==========================================
         if (this.currentCategory != null) {
             this.rightPanelList = new CustomKeybindList(this, this.minecraft, leftPanelWidth, this.width - leftPanelWidth, this.currentCategory.binds);
-            this.addWidget(this.rightPanelList);
+            this.addWidget(this.rightPanelList); // 列表因为在 render 中手动渲染了，保持 addWidget 即可
         }
 
         // ==========================================
@@ -68,13 +68,13 @@ public class KeybindSettingsScreen extends Screen {
         // ==========================================
         int bottomY = this.height - 30;
         int rightPanelWidth = this.width - leftPanelWidth;
-        int padding = 12; // 按钮距离右侧面板左右边缘的内边距
-        int gap = 6;      // 两个按钮之间的间距
+        int padding = 12;
+        int gap = 6;     
         int btnWidth = (rightPanelWidth - (padding * 2) - gap) / 2;
         int btn1X = leftPanelWidth + padding;
         int btn2X = btn1X + btnWidth + gap;
 
-        this.addWidget(Button.builder(Component.literal("恢复当前页默认"), (button) -> {
+        this.addRenderableWidget(Button.builder(Component.literal("恢复当前页默认"), (button) -> {
             if (this.currentCategory != null) {
                 for (CustomKeyBind bind : this.currentCategory.binds) {
                     bind.reset();
@@ -83,7 +83,7 @@ public class KeybindSettingsScreen extends Screen {
             this.activeBind = null;
         }).pos(btn1X, bottomY).size(btnWidth, 20).build());
 
-        this.addWidget(Button.builder(Component.literal("完成"), (button) -> {
+        this.addRenderableWidget(Button.builder(Component.literal("完成"), (button) -> {
             KeybindConfigManager.save();
             this.minecraft.setScreen(this.parentScreen);
         }).pos(btn2X, bottomY).size(btnWidth, 20).build());
