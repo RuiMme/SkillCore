@@ -2,10 +2,7 @@ package com.rui.skillcore.api.network;
 
 import com.rui.skillcore.api.network.skill.SyncSkillsPacket;
 import com.rui.skillcore.api.network.skill.cts.*;
-import com.rui.skillcore.api.network.skill.stc.S2CSyncActiveSkillsPacket;
-import com.rui.skillcore.api.network.skill.stc.S2CSyncCooldownGameTimePacket;
-import com.rui.skillcore.api.network.skill.stc.S2CSyncCooldownPacket;
-import com.rui.skillcore.api.network.skill.stc.S2CSyncSkillsPacket;
+import com.rui.skillcore.api.network.skill.stc.*;
 import com.rui.skillcore.libs.LibMisc;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,6 +30,7 @@ public class PacketHandler {
         HANDLER.registerMessage(id++, S2CSyncCooldownPacket.class, S2CSyncCooldownPacket::encode, S2CSyncCooldownPacket::new, S2CSyncCooldownPacket::handle);
         HANDLER.registerMessage(id++, S2CSyncCooldownGameTimePacket.class, S2CSyncCooldownGameTimePacket::encode, S2CSyncCooldownGameTimePacket::new, S2CSyncCooldownGameTimePacket::handle);
         HANDLER.registerMessage(id++, SyncSkillsPacket.class, SyncSkillsPacket::encode, SyncSkillsPacket::new, SyncSkillsPacket::handle);
+        HANDLER.registerMessage(id++, S2CSyncSkillDataPacket.class, S2CSyncSkillDataPacket::toBytes, S2CSyncSkillDataPacket::new, S2CSyncSkillDataPacket::handle);
     }
 
     public static void sendToServer(Object msg) {

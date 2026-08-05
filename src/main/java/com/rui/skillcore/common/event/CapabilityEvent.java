@@ -53,10 +53,6 @@ public class CapabilityEvent {
                     if (newData instanceof SkillData newSkillData && oldData instanceof SkillData oldSkillData) {
                         newSkillData.loadNBT(oldSkillData.saveNBT());
                     }
-//                    oldData.getUnlockedSkills().forEach((key, set) -> set.forEach(resourceLocation -> newData.unlockSkill(key, resourceLocation)));
-//                    oldData.getActiveSkills().forEach((key, set) -> set.forEach(resourceLocation -> newData.activeSkill(key, resourceLocation)));
-//                    oldData.getSkillCooldownGameTime().forEach((key, set) -> set.forEach((key1, set1) -> newData.setSkillCooldownGameTime(key, key1, set1)));
-//                    oldData.getSkillCooldown().forEach((key, set) -> set.forEach((key1, set1) -> newData.setSkillCooldown(key, key1, set1)));
                 });
             });
             original.invalidateCaps();
@@ -73,7 +69,7 @@ public class CapabilityEvent {
         syncDataToClient(event.getEntity());
     }
 
-    private static void syncDataToClient(Player player) {
+    public static void syncDataToClient(Player player) {
         // 只有服务端才能给客户端发包
         if (!player.level().isClientSide && player instanceof ServerPlayer) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
