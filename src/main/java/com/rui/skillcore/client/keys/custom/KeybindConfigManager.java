@@ -22,27 +22,18 @@ public class KeybindConfigManager {
         JsonObject keysObj = new JsonObject();
         JsonObject togglesObj = new JsonObject();
 
-        // 1. 保存技能按键 (升级为保存对象，包含主键及 Ctrl/Shift/Alt 状态)
-        for (CustomKeyBind bind : CustomKeybindRegistry.SKILL_BINDS) {
-            JsonObject bindObj = new JsonObject();
-            bindObj.addProperty("key", bind.getKey().getName());
-            bindObj.addProperty("ctrl", bind.isNeedCtrl());
-            bindObj.addProperty("shift", bind.isNeedShift());
-            bindObj.addProperty("alt", bind.isNeedAlt());
-            keysObj.add(bind.getId(), bindObj);
+        for (CustomKeybindRegistry.KeybindCategory category : CustomKeybindRegistry.CATEGORIES) {
+            for (CustomKeyBind bind : category.binds) {
+                JsonObject bindObj = new JsonObject();
+                bindObj.addProperty("key", bind.getKey().getName());
+                bindObj.addProperty("ctrl", bind.isNeedCtrl());
+                bindObj.addProperty("shift", bind.isNeedShift());
+                bindObj.addProperty("alt", bind.isNeedAlt());
+                keysObj.add(bind.getId(), bindObj);
+            }
         }
 
-        // 2. 保存功能按键 (同上)
-        for (CustomKeyBind bind : CustomKeybindRegistry.FUNCTION_BINDS) {
-            JsonObject bindObj = new JsonObject();
-            bindObj.addProperty("key", bind.getKey().getName());
-            bindObj.addProperty("ctrl", bind.isNeedCtrl());
-            bindObj.addProperty("shift", bind.isNeedShift());
-            bindObj.addProperty("alt", bind.isNeedAlt());
-            keysObj.add(bind.getId(), bindObj);
-        }
-
-        // 3. 保存功能开关状态 (Toggle States)
+        // 保存功能开关状态 (Toggle States)
         for (Map.Entry<String, Boolean> entry : CustomKeybindRegistry.TOGGLE_STATES.entrySet()) {
             togglesObj.addProperty(entry.getKey(), entry.getValue());
         }
@@ -70,8 +61,9 @@ public class KeybindConfigManager {
             // 1. 读取按键
             if (json.has("keys")) {
                 JsonObject keysObj = json.getAsJsonObject("keys");
-                loadKeysToList(keysObj, CustomKeybindRegistry.SKILL_BINDS);
-                loadKeysToList(keysObj, CustomKeybindRegistry.FUNCTION_BINDS);
+                for (CustomKeybindRegistry.KeybindCategory category : CustomKeybindRegistry.CATEGORIES) {
+                    loadKeysToList(keysObj, category.binds);
+                }
             }
 
             // 2. 读取开关状态

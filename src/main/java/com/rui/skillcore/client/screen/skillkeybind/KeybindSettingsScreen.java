@@ -25,17 +25,16 @@ public class KeybindSettingsScreen extends Screen {
     public KeybindSettingsScreen(Screen parentScreen) {
         super(Component.literal("自定义按键管理"));
         this.parentScreen = parentScreen;
-
-        // 默认打开时显示注册表中的第一个分类
-        if (!CustomKeybindRegistry.CATEGORIES.isEmpty()) {
-            this.currentCategory = CustomKeybindRegistry.CATEGORIES.get(0);
-        }
     }
 
     @Override
     protected void init() {
         super.init();
         this.clearWidgets();
+
+        if (this.currentCategory == null && !CustomKeybindRegistry.CATEGORIES.isEmpty()) {
+            this.currentCategory = CustomKeybindRegistry.CATEGORIES.get(0);
+        }
 
         int leftPanelWidth = 140;
         int navStartY = 45;
@@ -60,7 +59,9 @@ public class KeybindSettingsScreen extends Screen {
         // ==========================================
         if (this.currentCategory != null) {
             this.rightPanelList = new CustomKeybindList(this, this.minecraft, leftPanelWidth, this.width - leftPanelWidth, this.currentCategory.binds);
-            this.addWidget(this.rightPanelList); // 列表因为在 render 中手动渲染了，保持 addWidget 即可
+
+            this.rightPanelList.setLeftPos(leftPanelWidth);
+            this.addWidget(this.rightPanelList);
         }
 
         // ==========================================
